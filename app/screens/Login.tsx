@@ -1,73 +1,79 @@
 import { View, Text, TextInput, StyleSheet, ActivityIndicator, Button, findNodeHandle} from 'react-native';
 import React, {useState} from 'react';
-import { FIREBASE_AUTH } from '../../FirebaseConfig';
+import { AUTHENTICATION } from '../../FirebaseConfig';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 
 
-const Login = () => {
+const Entrar = () => {
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false);
-    const auth = FIREBASE_AUTH;
+    const [senha, setSenha] = useState('');
+    const [carregar, setCarregar] = useState(false);
+    const auth = AUTHENTICATION;
 
 
     const signIn = async () => { 
-        setLoading(true);
+        setCarregar(true);
         try {
-            const response = await signInWithEmailAndPassword(auth, email, password);
+            const response = await signInWithEmailAndPassword(auth, email, senha);
             console.log(response);
-            alert("Check Email")
+            alert("Entrando...")
         }catch (error: any){
             console.log(error);
-            alert('Registration Failed: '+ error.message)
+            alert('Registro falhou: '+ error.message)
         }finally {
-            setLoading(false);
+            setCarregar(false);
         }
     }
 
     const signUp = async () => {
-        setLoading(true);
+        setCarregar(true);
         try{
-            const response = await createUserWithEmailAndPassword(auth, email, password);
+            const response = await createUserWithEmailAndPassword(auth, email, senha);
             console.log(response);
-            alert("Check Email")
+            alert("Cadastrado")
         }catch(error: any){
             console.log(error);
-            alert('Registration Failed: '+ error.message)
+            alert('Registro Falhou: '+ error.message)
         }finally{
-            setLoading(false);
+            setCarregar(false);
         }
         
     }
 
     return (
-        <View style= {styles.constainer}>
+        <View style= {styles.container}>
             <TextInput  style = {styles.input} value={email} placeholder='Email' autoCapitalize='none' onChangeText={(text) => setEmail(text)}></TextInput>
-            <TextInput  style = {styles.input} secureTextEntry={true} value={password} placeholder='Password' autoCapitalize='none' onChangeText={(text) => setPassword(text)}></TextInput>
+            <TextInput  style = {styles.input} secureTextEntry={true} value={senha} placeholder='Password' autoCapitalize='none' onChangeText={(text) => setSenha(text)}></TextInput>
             
-             { loading ? <ActivityIndicator size = "large" color='#000ff'/>
+             { carregar ? <ActivityIndicator size = "large" color='#000ff'/>
              : <>
-             <Button title='Login' onPress={signIn}/>
-             <Button title='Create Account' onPress={signUp}/>
+             <Button title='Entrar' onPress={signIn}/>
+             <Button title='Criar conta' onPress={signUp}/>
              </>}
         </View>
     )
 }
 
-export default Login;
+export default Entrar;
 
 const styles = StyleSheet.create({
-    constainer: {
-        marginHorizontal: 20,
-        flex: 1, 
-        justifyContent: 'center'
+    container: {
+        paddingHorizontal: 24, 
+        flex: 1,
+        justifyContent: 'center',
+        backgroundColor: '#f0f0f0', 
+        alignItems: 'center' 
     },
     input: {
-        marginVertical: 4, 
-        height: 50,
-        borderWidth: 1, 
-        borderRadius: 4, 
-        padding: 10, 
-        backgroundColor: '#fff'
+        marginVertical: 8,
+        height: 40, 
+        width: '80%', 
+        borderWidth: 2,
+        borderRadius: 8,
+        padding: 12, 
+        backgroundColor: '#fff',
+        borderColor: '#007bff',
+        fontSize: 16, 
+        color: '#333' 
     }
-})
+});
